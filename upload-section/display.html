@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Uploaded Images and Text</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
+</head>
+<body class="bg-gray-100 min-h-screen ">
+
+  
+    <div class="mb-28">
+       &nbsp;
+    </div>
+
+    <div class="flex gap-2.5">
+        <a href="/upload-section/upload.html" class="inline-block flex-1 m-4 rounded-lg bg-indigo-500 px-8 py-3 text-center text-sm font-semibold text-white outline-none ring-indigo-300 transition duration-100 hover:bg-indigo-600 focus-visible:ring active:bg-indigo-700 sm:flex-none md:text-base">Back TO Upload
+        </a>
+    </div>
+    <div class="w-full max-w-6xl mx-auto">
+        <h1 class="text-3xl font-bold text-center mb-4">Uploaded Products</h1>
+
+      <div class="mb-4 ">
+        &nbsp;
+      </div>
+
+        <div id="displayImages" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <!-- Display uploaded images, associated text, and common link for every added image -->
+        </div>
+    </div>
+
+ 
+
+
+<script>
+    const displayImages = document.getElementById('displayImages');
+    let uploadedImages = JSON.parse(localStorage.getItem('uploadedImages')) || [];
+
+    // Function to delete an image and associated text
+    function deleteImage(index) {
+        uploadedImages.splice(index, 1);
+        localStorage.setItem('uploadedImages', JSON.stringify(uploadedImages));
+        refreshDisplay();
+    }
+
+    // Function to edit text for an image
+    function editText(index, field) {
+        const newText = prompt(`Edit the ${field} for this Product:`, uploadedImages[index][field]);
+        if (newText !== null) {
+            uploadedImages[index][field] = newText;
+            localStorage.setItem('uploadedImages', JSON.stringify(uploadedImages));
+            refreshDisplay();
+        }
+    }
+
+    // Function to refresh the display after edit or deletion
+    function refreshDisplay() {
+        displayImages.innerHTML = '';
+        if (uploadedImages.length > 0) {
+            uploadedImages.forEach((data, index) => {
+                const imageContainer = document.createElement('div');
+                const imgLink = document.createElement('a');
+                const imgElement = document.createElement('img');
+                const textElement = document.createElement('p');
+                // Set the common link to the image source
+                imgLink.href = data.image;
+                imgLink.target = '_blank';
+                imgElement.src = data.image;
+                imgElement.className = 'max-w-full h-auto';
+                textElement.innerHTML = `<strong>Product Name :</strong> ${data.text1}<br><strong>Price: ₹ </strong> ${data.text2}<br><strong> Category:</strong> ${data.text3}`;
+                imgLink.appendChild(imgElement);
+                imageContainer.appendChild(imgLink);
+                imageContainer.appendChild(textElement);
+                // Create "Edit" and "Delete" buttons for each image and text field
+                for (let i = 1; i <= 3; i++) {
+                    const editButton = document.createElement('button');
+                    editButton.textContent = `Edit Data ${i}`;
+                    editButton.className = 'bg-blue-500 text-white m-2 px-4 py-2 rounded-md hover:bg-blue-700 mr-2';
+                    editButton.addEventListener('click', () => {
+                        editText(index, `Data ${i}`);
+                    });
+                    imageContainer.appendChild(editButton);
+                }
+
+                const deleteButton = document.createElement('button');
+                deleteButton.textContent = 'Delete';
+                deleteButton.className = 'bg-red-500 text-white m-2 px-4 py-2 rounded-md hover:bg-red-700';
+                deleteButton.addEventListener('click', () => {
+                    deleteImage(index);
+                });
+                imageContainer.appendChild(deleteButton);
+                imageContainer.className = 'p-4 border rounded-md bg-white shadow-md';
+                displayImages.appendChild(imageContainer);
+            });
+        } else {
+            displayImages.textContent = 'No images and text have been uploaded.';
+        }
+    }
+
+    // Initialize the display
+    refreshDisplay();
+</script>
+</body>
+</html>
+
+ 

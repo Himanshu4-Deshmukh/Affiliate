@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign In</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-200 min-h-screen flex items-center justify-center">
+    <div class="bg-white p-8 rounded-lg shadow-lg">
+        <h1 class="text-2xl font-semibold mb-4">Sign In</h1>
+        <form id="loginForm">
+            <div class="mb-4">
+                <label for="username" class="block text-gray-600">Username</label>
+                <input type="text" id="username" name="username" class="w-full p-2 border rounded">
+            </div>
+            <div class="mb-4">
+                <label for="password" class="block text-gray-600">Password</label>
+                <input type="password" id="password" name="password" class="w-full p-2 border rounded">
+            </div>
+            <div class="mb-4">
+                <button type="submit" class="bg-blue-500 text-white p-2 rounded hover:bg-blue-600">Log In</button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            // Replace with your authentication logic.
+            if (username === 'sunny' && password === 'sunny') {
+                window.location.href = 'upload.html';
+            } else {
+                alert('Invalid username or password. Please try again.');
+            }
+          
+        });
+    </script>
+</body>
+</html>

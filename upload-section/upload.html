@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Image and Text Upload</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
+</head>
+<body class="bg-gray-100 min-h-screen ">
+
+   
+
+<div class="mb-16">
+    &nbsp;
+</div>
+<div class="w-full max-w-md mx-auto">
+    <h1 class="text-3xl font-bold text-center mb-4">Upload Products</h1>
+    <div class="bg-white p-4 rounded-md shadow-md">
+        <input type="file" id="imageInput" accept="image/*" class="w-full mb-4 p-2 border rounded-md focus:outline-none">
+
+        <!-- Input fields with placeholders -->
+        <div class="mb-4">
+            <input type="text" id="textInput1" class="w-full p-2 border rounded-md focus:outline-none" placeholder="Enter Product Name">
+        </div>
+        <div class="mb-4">
+            <input type="text" id="textInput2" class="w-full p-2 border rounded-md focus:outline-none" placeholder="Enter Product Price">
+        </div>
+        <div class="mb-4">
+            <input type="text" id="textInput3" class="w-full p-2 border rounded-md focus:outline-none" placeholder="Enter Product Category">
+        </div>
+        <div class="mb-4">
+            <input type="url" id="linkInput" class="w-full p-2 border rounded-md focus:outline-none" placeholder="Enter Product Link">
+        </div>
+
+        <button id="uploadButton" class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-700 w-full mt-4">Upload Product Details</button>
+    </div>
+
+    <div class="flex gap-2.5">
+        <a href="/upload-section/display.html" class="inline-block flex-1 m-6 rounded-lg bg-indigo-500 px-8 py-3 text-center text-sm font-semibold text-white outline-none ring-indigo-300 transition duration-100 hover:bg-indigo-600 focus-visible:ring active:bg-indigo-700 sm:flex-none md:text-base">View Uploaded Products
+        </a>
+    </div>
+
+    <div id="displayImages" class="grid grid-cols-1 mb-8 md:grid-cols-3 lg:grid-cols-4 gap-4">
+        <!-- Display uploaded images, associated text, and common link for every added image -->
+    </div>
+</div>
+
+
+
+
+    
+ 
+
+
+<script>
+    // Function to handle image and text upload
+    function handleImageUpload() {
+        const imageInput = document.getElementById('imageInput');
+        const textInput1 = document.getElementById('textInput1');
+        const textInput2 = document.getElementById('textInput2');
+        const textInput3 = document.getElementById('textInput3');
+        const linkInput = document.getElementById('linkInput');
+        const imageList = document.getElementById('imageList');
+        const file = imageInput.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                // Save the image and text to local storage
+                const data = {
+                    image: e.target.result,
+                    text1: textInput1.value,
+                    text2: textInput2.value,
+                    text3: textInput3.value,
+                    link: linkInput.value
+                };
+                const images = JSON.parse(localStorage.getItem('uploadedImages')) || [];
+                images.push(data);
+                localStorage.setItem('uploadedImages', JSON.stringify(images));
+                // Create an image element, text element, and link button to display the uploaded content
+                const imageContainer = document.createElement('div');
+                const imgLink = document.createElement('a');
+                const imgElement = document.createElement('img');
+                const textElement = document.createElement('p');
+                const linkButton = document.createElement('a');
+                // Set the common link to the image source
+                imgLink.href = data.image;
+                imgLink.target = '_blank';
+                imgElement.src = data.image;
+                imgElement.className = 'max-w-full h-auto';
+                textElement.innerHTML = `<strong>Product:</strong> ${data.text1}<br><strong>Price/Quintol: ₹ </strong> ${data.text2}<br><strong>Category:</strong> ${data.text3}`;
+                linkButton.href = data.link;
+                linkButton.target = '_blank';
+                linkButton.className = 'bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-700 mt-2 block';
+                linkButton.textContent = 'Product Link';
+                imgLink.appendChild(imgElement);
+                imageContainer.appendChild(imgLink);
+                imageContainer.appendChild(textElement);
+                imageContainer.appendChild(linkButton);
+                imageContainer.className = 'mb-4 p-4 border rounded-md bg-white shadow-md';
+                imageList.appendChild(imageContainer);
+                // Clear input fields and reset placeholders
+                imageInput.value = '';
+                textInput1.value = '';
+                textInput2.value = '';
+                textInput3.value = '';
+                linkInput.value = '';
+            };
+            reader.readAsDataURL(file);
+        }
+    }
+    // Attach the image upload function to the button
+    const uploadButton = document.getElementById('uploadButton');
+    uploadButton.addEventListener('click', handleImageUpload);
+</script>
+</body>
+</html>
